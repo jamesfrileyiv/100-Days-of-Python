@@ -1,0 +1,1 @@
+This is the same project as day 15, except refactored to be object-oriented. Admittedly, this came with the following starter files: coffee_maker.py, menu.py, and money_machine.py. The goal of the exercise was not to make classes from scratch but to introduce OOP, and demonstrate using objects created by someone else.
