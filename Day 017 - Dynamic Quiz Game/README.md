@@ -1,0 +1,1 @@
+Dynamic Quiz Game utilizes OOP and an API GET request to Open Trivia Database to create and play a 10 question true/false quiz which changes each time you play the game.
