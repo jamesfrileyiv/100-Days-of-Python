@@ -1,0 +1,1 @@
+This program uses the turtle and colorgram modules to create an image in the style of a Hirst Dot Painting.
