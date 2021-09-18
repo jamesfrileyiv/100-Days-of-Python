@@ -23,7 +23,6 @@ class ScoreBoard(Turtle):
 
     @staticmethod
     def initialize_high_score():
-        # file_path = path(HIGH_SCORE_FILE_PATH)
         high_score = DEFAULT_HIGH_SCORE
         if path.exists(HIGH_SCORE_FILE_PATH):
             with open(file=HIGH_SCORE_FILE_PATH, mode="r") as f:
@@ -32,10 +31,8 @@ class ScoreBoard(Turtle):
                 if int(line) > 0:
                     high_score = int(line)
             else:
-                # high_score = DEFAULT_HIGH_SCORE
                 with open(file=HIGH_SCORE_FILE_PATH, mode="w") as f:
                     f.write(str(high_score))
-            # return high_score
         else:
             with open(file=HIGH_SCORE_FILE_PATH, mode="w") as f:
                 f.write(str(DEFAULT_HIGH_SCORE))
