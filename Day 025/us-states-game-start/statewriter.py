@@ -1,7 +1,7 @@
 from turtle import Turtle
 
 ALIGNMENT = "center"
-FONT = ("Courier", 12, "normal")
+FONT = ("Courier", 6, "normal")
 
 
 class StateWriter(Turtle):

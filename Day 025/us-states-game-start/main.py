@@ -1,9 +1,8 @@
 import turtle
 from turtle import Screen
-from turtle import Turtle
 import pandas as pd
 from statewriter import StateWriter
-import pprint
+from scoreboard import Scoreboard
 
 MAP_IMAGE = "blank_states_img.gif"
 STATE_DATA = "50_states.csv"
@@ -12,7 +11,6 @@ INPUT_PROMPT = "Guess a state name"
 INPUT_PROMPT_TITLE = "Guess a state"
 MAX_WRONG_ANSWERS = 10
 
-pp = pprint.PrettyPrinter(indent=4)
 
 def main():
     df = pd.read_csv(STATE_DATA)
@@ -20,44 +18,27 @@ def main():
     screen = screen_setup()
     turtle.shape(MAP_IMAGE)
     state_writer = StateWriter()
-    wrong_answer_count = 0
-    game_is_on = True
-    while game_is_on:
-        # Get user input
-        user_input = screen.textinput(title=INPUT_PROMPT_TITLE, prompt=INPUT_PROMPT)
-
-        # check if user input is already used
-        if user_input not in previous_answers:
-            # add user input to previous answers
-            previous_answers[user_input] = 0
-            # check if a valid state
-            if user_input in df["state"]:
-                # if a valid state, then print name on map
-                index = df.index(df["state"] == user_input)
-                row = df.loc(index)
-                print(row)
-                state_writer.write_state(row[0], row[1], row[2])
-            else:
-                wrong_answer_count += 1
-                if wrong_answer_count == MAX_WRONG_ANSWERS:
-                    game_is_on = False
-        else:
-            previous_answers[user_input] += 1
-        pp.pprint(previous_answers)
-
-
-
-        #
-        # game_is_on = game_turn(screen, df)
+    sb = Scoreboard()
+    while not sb.confirm_game_over():
+        game_turn(screen=screen,previous_answers=previous_answers, df=df, state_writer=state_writer, score_board=sb)
     screen.mainloop()
 
 
-# def game_turn(screen: turtle.Screen, df: pd.DataFrame):
-#     game_is_on = False
-#     user_input = screen.textinput(title=INPUT_PROMPT_TITLE, prompt=INPUT_PROMPT)
-#     if user_input in df.states:
-#
-#     return game_is_on
+def game_turn(
+        screen: Screen, previous_answers: dict, df: pd.DataFrame, state_writer: StateWriter, score_board: Scoreboard):
+    user_input = screen.textinput(title=INPUT_PROMPT_TITLE, prompt=INPUT_PROMPT)
+    if user_input != "" and user_input is not None:
+        if user_input not in previous_answers:
+            previous_answers[user_input] = 0
+            if user_input in df["state"].values:
+                row = df.iloc[df.index[df["state"] == user_input]]
+                state_writer.write_state(row.iloc[0].iloc[0], row.iloc[0].iloc[1], row.iloc[0].iloc[2])
+                score_board.increment_score()
+            else:
+                score_board.increment_wrong()
+            score_board.refresh()
+    if score_board.confirm_game_over():
+        score_board.game_over()
 
 
 def screen_setup():
